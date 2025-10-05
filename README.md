@@ -159,7 +159,7 @@ dotnet build NuGetExplorerMcp.sln -c Release
 
 **Windows:**
 ```bash
-claude mcp add nuget-explorer -- cmd /c "dotnet run --project C:/Code/Personal/Nuget.Mcp/src/NuGetExplorerMcp.Server/NuGetExplorerMcp.Server.csproj --no-build -c Release"
+claude mcp add-json nuget-explorer '{"type":"stdio","command":"cmd","args":["/c","dotnet run --project [PATH TO REPOS]/Nuget.Mcp/src/NuGetExplorerMcp.Server/NuGetExplorerMcp.Server.csproj --no-build -c Release"],"env":{}}' --scope user
 ```
 
 **Mac/Linux:**

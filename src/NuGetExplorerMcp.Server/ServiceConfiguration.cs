@@ -8,7 +8,6 @@ namespace NuGetExplorerMcp.Server;
 
 /// <summary>
 /// Configures dependency injection for the NuGet Explorer MCP Server.
-/// Follows Dependency Inversion Principle (DIP) by registering interfaces to implementations.
 /// </summary>
 public static class ServiceConfiguration
 {

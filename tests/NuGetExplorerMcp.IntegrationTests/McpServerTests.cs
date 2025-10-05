@@ -20,7 +20,7 @@ public class McpServerTests : IAsyncLifetime
             Path.Combine(
                 Directory.GetCurrentDirectory(),
                 "..", "..", "..", "..", "..",
-                "src", "NuGetExplorerMcp.Server", "bin", "Release", "net8.0",
+                "src", "NuGetExplorerMcp.Server", "bin", "Release", "net10.0",
                 "NuGetExplorerMcp.Server.dll"
             )
         );
