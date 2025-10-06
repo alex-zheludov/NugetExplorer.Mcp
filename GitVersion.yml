@@ -1,75 +1,84 @@
+workflow: GitFlow/v1
 mode: ContinuousDeployment
 branches:
   main:
     regex: ^main$
     mode: ContinuousDelivery
-    tag: ''
+    label: ''
     increment: Patch
-    prevent-increment-of-merged-branch-version: true
+    prevent-increment:
+      when-branch-merged: true
     track-merge-target: false
+    source-branches: ['develop', 'release']
     tracks-release-branches: false
     is-release-branch: true
     is-mainline: true
   develop:
     regex: ^dev(elop)?(ment)?$
     mode: ContinuousDeployment
-    tag: alpha
+    label: alpha
     increment: Minor
-    prevent-increment-of-merged-branch-version: false
+    prevent-increment:
+      when-branch-merged: false
     track-merge-target: true
+    source-branches: []
     tracks-release-branches: true
     is-release-branch: false
     is-mainline: false
   feature:
     regex: ^features?[/-]
     mode: ContinuousDeployment
-    tag: useBranchName
+    label: useBranchName
     increment: Inherit
-    prevent-increment-of-merged-branch-version: false
+    prevent-increment:
+      when-branch-merged: false
     track-merge-target: false
+    source-branches: ['develop']
     tracks-release-branches: false
     is-release-branch: false
     is-mainline: false
   pull-request:
     regex: ^(pull|pull\-requests|pr)[/-]
     mode: ContinuousDeployment
-    tag: PullRequest
+    label: PullRequest
     increment: Inherit
-    prevent-increment-of-merged-branch-version: false
-    tag-number-pattern: '[/-](?<number>\d+)'
+    prevent-increment:
+      when-branch-merged: false
+    label-number-pattern: '[/-](?<number>\d+)'
     track-merge-target: false
+    source-branches: ['develop', 'main', 'release', 'feature', 'hotfix']
     tracks-release-branches: false
     is-release-branch: false
     is-mainline: false
   hotfix:
     regex: ^hotfix(es)?[/-]
     mode: ContinuousDeployment
-    tag: beta
+    label: beta
     increment: Patch
-    prevent-increment-of-merged-branch-version: false
+    prevent-increment:
+      when-branch-merged: false
     track-merge-target: false
+    source-branches: ['main']
     tracks-release-branches: false
     is-release-branch: false
     is-mainline: false
   release:
     regex: ^releases?[/-]
     mode: ContinuousDelivery
-    tag: rc
+    label: rc
     increment: None
-    prevent-increment-of-merged-branch-version: true
+    prevent-increment:
+      when-branch-merged: true
     track-merge-target: false
+    source-branches: ['develop']
     tracks-release-branches: false
     is-release-branch: true
     is-mainline: false
 ignore:
   sha: []
-merge-message-formats: {}
 major-version-bump-message: '\+semver:\s?(breaking|major)'
 minor-version-bump-message: '\+semver:\s?(feature|minor)'
 patch-version-bump-message: '\+semver:\s?(fix|patch)'
 no-bump-message: '\+semver:\s?(none|skip)'
-legacy-semver-padding: 4
-build-metadata-padding: 4
-commits-since-version-source-padding: 4
 tag-prefix: '[vV]'
 commit-message-incrementing: Enabled
