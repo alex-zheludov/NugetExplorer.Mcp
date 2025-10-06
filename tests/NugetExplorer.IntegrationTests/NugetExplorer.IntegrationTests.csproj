@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Shouldly" />
     <Using Include="Xunit" />
   </ItemGroup>
+    
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\NugetExplorer.Domain\NugetExplorer.Domain.csproj" />

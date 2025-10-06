@@ -1,4 +1,5 @@
 using ModelContextProtocol.Client;
+using Shouldly;
 using Xunit.Abstractions;
 
 namespace NugetExplorer.IntegrationTests;
