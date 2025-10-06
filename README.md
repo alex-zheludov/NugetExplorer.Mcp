@@ -1,6 +1,6 @@
-# NuGet Explorer MCP Server
+# NuGet Explorer MCP
 
-A Model Context Protocol (MCP) server that provides comprehensive NuGet package analysis capabilities. Check packages for updates, security vulnerabilities, and license changes - all from your AI coding assistant.
+A Model Context Protocol (MCP) server for NuGet package analysis. Enables AI assistants to check packages for updates, security vulnerabilities, and license changes using your configured NuGet feeds.
 
 ## Features
 
@@ -9,50 +9,6 @@ A Model Context Protocol (MCP) server that provides comprehensive NuGet package 
 - **License Change Detection** - Alert when licenses change between versions
 - **Private Feed Support** - Works with nuget.config (Azure Artifacts, GitHub Packages, etc.)
 - **Intelligent Caching** - Optimized for performance with configurable TTLs
-- **Clean Architecture** - SOLID principles, dependency injection, separation of concerns
-
-## Architecture
-
-Built using the [Model Context Protocol C# SDK](https://github.com/modelcontextprotocol/csharp-sdk) with Clean Architecture and SOLID principles:
-
-```
-┌─────────────────────────────────────────────────────┐
-│ MCP Server Layer                                     │
-│ - Attribute-based Tools ([McpServerTool])           │
-│ - Dependency Injection via SDK                      │
-│ - STDIO Transport                                   │
-└──────────────────┬──────────────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────────────┐
-│ Application Layer                                    │
-│ - PackageAnalyzer (Orchestrator)                    │
-│ - Business Logic & Use Cases                        │
-└──────────────────┬──────────────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────────────┐
-│ Infrastructure Layer                                 │
-│ - PackageSourceManager (NuGet API)                  │
-│ - UpdateChecker (Version Comparison)                │
-│ - VulnerabilityScanner (GitHub Advisory)            │
-│ - LicenseAnalyzer (License Detection)               │
-│ - MemoryCacheService (Performance)                  │
-└──────────────────┬──────────────────────────────────┘
-                   │
-┌──────────────────▼──────────────────────────────────┐
-│ Domain Layer                                         │
-│ - Entities (PackageAnalysis, Vulnerability, etc.)   │
-│ - Value Objects (PackageReference, Options)         │
-│ - Enums (SeverityLevel, VersionChangeType)          │
-└─────────────────────────────────────────────────────┘
-```
-
-### SOLID Principles Applied
-
-- **Single Responsibility**: Each service has one focused responsibility
-- **Open/Closed**: Extensible without modifying existing code
-- **Liskov Substitution**: Interfaces can be swapped with implementations
-- **Interface Segregation**: Focused interfaces for each concern
-- **Dependency Inversion**: Depends on abstractions, not concretions
 
 ## MCP Tools
 
@@ -141,66 +97,35 @@ Works seamlessly with private feeds (Azure Artifacts, GitHub Packages, etc.):
 
 Authentication is handled via NuGet's credential provider mechanism.
 
-## Quick Start
+## Installation
 
 ### 1. Build the Server
 
 ```bash
-dotnet build NuGetExplorerMcp.sln -c Release
+dotnet build -c Release
 ```
 
-### 2. Setup with Your AI Assistant
+### 2. Configure MCP Client
 
-#### **Claude Code (VS Code)**
+Replace `[PATH_TO_REPO]` with the absolute path to where you cloned this repository.
 
-1. Install the [Claude Code extension](https://marketplace.visualstudio.com/items?itemName=Anthropic.claude-code) from VS Code marketplace
-
-2. Open Claude Code in VS Code and run:
+#### Claude Desktop / Claude Code
 
 **Windows:**
 ```bash
-claude mcp add-json nuget-explorer '{"type":"stdio","command":"cmd","args":["/c","dotnet run --project [PATH TO REPOS]/Nuget.Mcp/src/NuGetExplorerMcp.Server/NuGetExplorerMcp.Server.csproj --no-build -c Release"],"env":{}}' --scope user
+claude mcp add-json nuget-explorer '{"type":"stdio","command":"cmd","args":["/c","dotnet run --project [PATH_TO_REPO]/src/NugetExplorer.Mcp/NugetExplorer.Mcp.csproj --no-build -c Release"],"env":{}}' --scope user
 ```
 
 **Mac/Linux:**
 ```bash
-claude mcp add nuget-explorer -- dotnet run --project ~/Code/Personal/Nuget.Mcp/src/NuGetExplorerMcp.Server/NuGetExplorerMcp.Server.csproj --no-build -c Release
+claude mcp add nuget-explorer -- dotnet run --project [PATH_TO_REPO]/src/NugetExplorer.Mcp/NugetExplorer.Mcp.csproj --no-build -c Release
 ```
 
-   **Note:** Update the path to match where you cloned this repository.
+See [Claude MCP Setup Guide](https://docs.claude.com/en/docs/mcp/servers)
 
-3. Reload VS Code (Ctrl+Shift+P → "Developer: Reload Window")
+#### GitHub Copilot
 
-4. Open Claude Code and ask: *"Check my NuGet packages for updates and vulnerabilities"*
-
-#### **GitHub Copilot (VS Code)**
-
-1. Install the [GitHub Copilot extension](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) from VS Code marketplace
-
-2. **Option A: Repository-specific** - Create `.vscode/mcp.json` in your project:
-
-```json
-{
-  "inputs": [],
-  "servers": {
-    "nuget-explorer": {
-      "command": "dotnet",
-      "args": [
-        "run",
-        "--project",
-        "C:/Code/Personal/Nuget.Mcp/src/NuGetExplorerMcp.Server/NuGetExplorerMcp.Server.csproj",
-        "--no-build",
-        "-c",
-        "Release"
-      ]
-    }
-  }
-}
-```
-
-   **OR**
-
-   **Option B: Global** - Add to your VS Code `settings.json`:
+Add to `.vscode/mcp.json` (repository-specific) or VS Code `settings.json` (global):
 
 ```json
 {
@@ -210,7 +135,7 @@ claude mcp add nuget-explorer -- dotnet run --project ~/Code/Personal/Nuget.Mcp/
       "args": [
         "run",
         "--project",
-        "C:/Code/Personal/Nuget.Mcp/src/NuGetExplorerMcp.Server/NuGetExplorerMcp.Server.csproj",
+        "[PATH_TO_REPO]/src/NugetExplorer.Mcp/NugetExplorer.Mcp.csproj",
         "--no-build",
         "-c",
         "Release"
@@ -220,80 +145,20 @@ claude mcp add nuget-explorer -- dotnet run --project ~/Code/Personal/Nuget.Mcp/
 }
 ```
 
-   **Note:** Update the path to match where you cloned this repository. Use forward slashes `/` even on Windows.
+See [GitHub Copilot MCP Documentation](https://docs.github.com/en/copilot/how-tos/provide-context/use-mcp/extend-copilot-chat-with-mcp)
 
-3. Reload VS Code or click "Start" next to the server name in Copilot Chat
 
-4. Verify the server is running by checking the tools icon in Copilot Chat
+## Usage
 
-5. Ask Copilot: *"Check my NuGet packages for updates and vulnerabilities"*
+Once configured, ask your AI assistant:
 
-📖 [GitHub Copilot MCP Documentation](https://docs.github.com/en/copilot/how-tos/provide-context/use-mcp/extend-copilot-chat-with-mcp)
+- *"Check packages in this solution for updates"*
+- *"Scan my packages for security vulnerabilities"*
+- *"Analyze these packages for updates, vulnerabilities, and license changes"*
+- *"What NuGet sources are configured on my machine?"*
 
-### 3. Test the Installation
+The assistant will use the MCP tools to return structured analysis including updates, vulnerabilities, license changes, and compatibility information.
 
-**Windows:**
-```powershell
-.\tests\integration\quick-test.ps1
-# or
-.\tests\integration\test-mcp-server.ps1
-```
-
-## Usage Examples
-
-Once configured with Claude Code, you can ask natural language questions:
-
-### Check Packages for Updates
-```
-"Check if Newtonsoft.Json 12.0.0 has any updates available"
-```
-
-### Security Scan
-```
-"Scan my packages for security vulnerabilities: Newtonsoft.Json 12.0.0 and Serilog 2.10.0"
-```
-
-### Full Analysis
-```
-"Analyze these packages for updates, vulnerabilities, and license changes:
-- Newtonsoft.Json 12.0.0
-- Serilog 2.10.0
-- EntityFrameworkCore 6.0.0"
-```
-
-### List Package Sources
-```
-"What NuGet sources are configured on my machine?"
-```
-
-The server will automatically parse your request and return structured analysis with:
-- Available updates (stable & prerelease versions)
-- Security vulnerabilities with severity levels
-- License changes between versions
-- Compatibility information
-
-## Project Structure
-
-```
-NuGetExplorerMcp/
-├── src/
-│   ├── NuGetExplorerMcp.Domain/          # Domain entities & value objects
-│   │   ├── Entities/
-│   │   ├── Enums/
-│   │   └── ValueObjects/
-│   ├── NuGetExplorerMcp.Application/     # Business logic & interfaces
-│   │   ├── Interfaces/
-│   │   └── Services/
-│   ├── NuGetExplorerMcp.Infrastructure/  # External integrations
-│   │   └── Services/
-│   └── NuGetExplorerMcp.Server/         # MCP server entry point
-│       ├── Tools/
-│       ├── Models/
-│       ├── ServiceConfiguration.cs
-│       └── Program.cs
-└── tests/
-    └── NuGetExplorerMcp.Tests/
-```
 
 ## Caching Strategy
 
@@ -306,35 +171,21 @@ Optimized for performance with in-memory caching:
 | Vulnerabilities | 6 hours | `vuln:{packageId}:{version}` |
 | License Info | 24 hours | `license:{packageId}:{version}` |
 
-## Dependencies
 
-### NuGet Packages
-- `NuGet.Protocol` - NuGet V3 API client
-- `NuGet.Versioning` - SemVer version comparison
-- `NuGet.Configuration` - nuget.config parsing
-- `NuGet.Packaging` - Package metadata parsing
-- `Microsoft.Extensions.Caching.Memory` - In-memory caching
-- `Microsoft.Extensions.DependencyInjection` - DI container
-- `Microsoft.Extensions.Logging` - Structured logging
+## Project Structure
 
-## Performance
-
-- **Single package analysis**: < 1 second
-- **Batch (10 packages)**: < 4 seconds
-- **Batch (50 packages)**: < 15 seconds
-
-Parallel processing is used to query multiple packages simultaneously.
+```
+src/
+├── NugetExplorer.Domain/    # Domain entities, interfaces, and services
+└── NugetExplorer.Mcp/       # MCP server and tools
+tests/
+├── NugetExplorer.Tests/              # Unit tests
+└── NugetExplorer.IntegrationTests/   # Integration tests
+```
 
 ## Contributing
 
-This server follows Clean Architecture principles. When adding features:
-
-1. **Domain Layer**: Add entities/value objects
-2. **Application Layer**: Define interfaces
-3. **Infrastructure Layer**: Implement services
-4. **Server Layer**: Expose via MCP tools
-
-Maintain SOLID principles and add appropriate logging.
+Contributions are welcome. This project follows domain-driven design principles with services in the Domain layer and MCP tool definitions in the Mcp layer.
 
 ## License
 

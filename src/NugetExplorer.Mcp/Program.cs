@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NuGetExplorerMcp.Domain;
 using NuGetExplorerMcp.Server;
 
 var builder = Host.CreateApplicationBuilder(args);

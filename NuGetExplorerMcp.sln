@@ -5,19 +5,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetExplorerMcp.Domain", "src\NuGetExplorerMcp.Domain\NuGetExplorerMcp.Domain.csproj", "{210D4DF4-4626-4543-ACEC-C82F308B0EA0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetExplorer.Domain", "src\NugetExplorer.Domain\NugetExplorer.Domain.csproj", "{210D4DF4-4626-4543-ACEC-C82F308B0EA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetExplorerMcp.Application", "src\NuGetExplorerMcp.Application\NuGetExplorerMcp.Application.csproj", "{7B9EE668-1F85-4673-9CE4-19D472802590}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetExplorerMcp.Infrastructure", "src\NuGetExplorerMcp.Infrastructure\NuGetExplorerMcp.Infrastructure.csproj", "{2E1C3896-EE44-4466-A105-80BE16E787B5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetExplorerMcp.Server", "src\NuGetExplorerMcp.Server\NuGetExplorerMcp.Server.csproj", "{9C1CCCBB-ACB1-4C51-838F-8A9D0F99D437}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetExplorer.Mcp", "src\NugetExplorer.Mcp\NugetExplorer.Mcp.csproj", "{9C1CCCBB-ACB1-4C51-838F-8A9D0F99D437}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetExplorerMcp.Tests", "tests\NuGetExplorerMcp.Tests\NuGetExplorerMcp.Tests.csproj", "{31E35970-A5D3-4D97-BCE2-376026D8CBA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetExplorer.Tests", "tests\NugetExplorer.Tests\NugetExplorer.Tests.csproj", "{31E35970-A5D3-4D97-BCE2-376026D8CBA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetExplorerMcp.IntegrationTests", "tests\NuGetExplorerMcp.IntegrationTests\NuGetExplorerMcp.IntegrationTests.csproj", "{FBC05B13-16BA-4703-BBFF-9635C1D9A147}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetExplorer.IntegrationTests", "tests\NugetExplorer.IntegrationTests\NugetExplorer.IntegrationTests.csproj", "{FBC05B13-16BA-4703-BBFF-9635C1D9A147}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,30 +37,6 @@ Global
 		{210D4DF4-4626-4543-ACEC-C82F308B0EA0}.Release|x64.Build.0 = Release|Any CPU
 		{210D4DF4-4626-4543-ACEC-C82F308B0EA0}.Release|x86.ActiveCfg = Release|Any CPU
 		{210D4DF4-4626-4543-ACEC-C82F308B0EA0}.Release|x86.Build.0 = Release|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Debug|x64.Build.0 = Debug|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Debug|x86.Build.0 = Debug|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Release|x64.ActiveCfg = Release|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Release|x64.Build.0 = Release|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Release|x86.ActiveCfg = Release|Any CPU
-		{7B9EE668-1F85-4673-9CE4-19D472802590}.Release|x86.Build.0 = Release|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Debug|x64.Build.0 = Debug|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Debug|x86.Build.0 = Debug|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Release|x64.ActiveCfg = Release|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Release|x64.Build.0 = Release|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Release|x86.ActiveCfg = Release|Any CPU
-		{2E1C3896-EE44-4466-A105-80BE16E787B5}.Release|x86.Build.0 = Release|Any CPU
 		{9C1CCCBB-ACB1-4C51-838F-8A9D0F99D437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9C1CCCBB-ACB1-4C51-838F-8A9D0F99D437}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C1CCCBB-ACB1-4C51-838F-8A9D0F99D437}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -107,8 +79,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{210D4DF4-4626-4543-ACEC-C82F308B0EA0} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{7B9EE668-1F85-4673-9CE4-19D472802590} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
-		{2E1C3896-EE44-4466-A105-80BE16E787B5} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{9C1CCCBB-ACB1-4C51-838F-8A9D0F99D437} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{31E35970-A5D3-4D97-BCE2-376026D8CBA9} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{FBC05B13-16BA-4703-BBFF-9635C1D9A147} = {0AB3BF05-4346-4AA6-1389-037BE0695223}

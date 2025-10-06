@@ -8,7 +8,6 @@ namespace NuGetExplorerMcp.Infrastructure.Services;
 
 /// <summary>
 /// Analyzes package licenses and detects license changes between versions.
-/// Follows Interface Segregation Principle (ISP) by implementing focused license analysis interface.
 /// </summary>
 public class LicenseAnalyzer : ILicenseAnalyzer
 {

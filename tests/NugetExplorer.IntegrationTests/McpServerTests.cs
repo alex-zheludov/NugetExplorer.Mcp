@@ -1,41 +1,28 @@
 using ModelContextProtocol.Client;
 using Xunit.Abstractions;
 
-namespace NuGetExplorerMcp.IntegrationTests;
+namespace NugetExplorer.IntegrationTests;
 
-public class McpServerTests : IAsyncLifetime
+public class McpServerTests : IClassFixture<McpServerFixture>, IAsyncLifetime
 {
     private readonly ITestOutputHelper _output;
+    private readonly McpServerFixture _fixture;
     private McpClient? _client;
 
-    public McpServerTests(ITestOutputHelper output)
+    public McpServerTests(ITestOutputHelper output, McpServerFixture fixture)
     {
         _output = output;
+        _fixture = fixture;
     }
 
     public async Task InitializeAsync()
     {
-        // Get the path to the server executable
-        var serverPath = Path.GetFullPath(
-            Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "..", "..", "..", "..", "..",
-                "src", "NuGetExplorerMcp.Server", "bin", "Release", "net10.0",
-                "NuGetExplorerMcp.Server.dll"
-            )
-        );
-
-        if (!File.Exists(serverPath))
-        {
-            throw new FileNotFoundException($"Server executable not found at: {serverPath}");
-        }
-
         // Create MCP client with stdio transport
         var transport = new StdioClientTransport(new StdioClientTransportOptions
         {
             Name = "NuGetExplorerMcp.Server",
             Command = "dotnet",
-            Arguments = [serverPath]
+            Arguments = [_fixture.ServerPath]
         });
 
         _client = await McpClient.CreateAsync(transport);
@@ -48,8 +35,8 @@ public class McpServerTests : IAsyncLifetime
         var tools = await _client!.ListToolsAsync();
 
         // Assert
-        Assert.NotNull(tools);
-        Assert.NotEmpty(tools);
+        tools.ShouldNotBeNull();
+        tools.ShouldNotBeEmpty();
 
         _output.WriteLine($"Found {tools.Count} tools:");
         foreach (var tool in tools)
@@ -57,8 +44,8 @@ public class McpServerTests : IAsyncLifetime
             _output.WriteLine($"  - {tool.Name}: {tool.Description}");
         }
 
-        Assert.Contains(tools, t => t.Name == "list_package_sources");
-        Assert.Contains(tools, t => t.Name == "analyze_packages");
+        tools.ShouldContain(t => t.Name == "list_package_sources");
+        tools.ShouldContain(t => t.Name == "analyze_packages");
     }
 
     [Fact]
@@ -71,16 +58,16 @@ public class McpServerTests : IAsyncLifetime
             cancellationToken: CancellationToken.None);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.NotEmpty(result.Content);
+        result.ShouldNotBeNull();
+        result.Content.ShouldNotBeEmpty();
 
         var textContent = result.Content.FirstOrDefault(c => c.Type == "text");
-        Assert.NotNull(textContent);
+        textContent.ShouldNotBeNull();
 
         var text = textContent.GetType().GetProperty("Text")?.GetValue(textContent) as string;
         _output.WriteLine($"Package sources result: {text}");
 
-        Assert.Contains("sources", text);
+        text.ShouldContain("sources");
     }
 
     [Fact]
@@ -108,17 +95,17 @@ public class McpServerTests : IAsyncLifetime
             cancellationToken: CancellationToken.None);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.NotEmpty(result.Content);
+        result.ShouldNotBeNull();
+        result.Content.ShouldNotBeEmpty();
 
         var textContent = result.Content.FirstOrDefault(c => c.Type == "text");
-        Assert.NotNull(textContent);
+        textContent.ShouldNotBeNull();
 
         var text = textContent.GetType().GetProperty("Text")?.GetValue(textContent) as string;
         _output.WriteLine($"Analysis result: {text}");
 
-        Assert.Contains("packages", text);
-        Assert.Contains("Newtonsoft.Json", text);
+        text.ShouldContain("packages");
+        text.ShouldContain("Newtonsoft.Json");
     }
 
     public async Task DisposeAsync()

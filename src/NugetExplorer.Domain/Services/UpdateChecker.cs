@@ -9,7 +9,6 @@ namespace NuGetExplorerMcp.Infrastructure.Services;
 
 /// <summary>
 /// Checks for package updates and determines version compatibility.
-/// Follows Open/Closed Principle (OCP) - can be extended for custom version comparison logic.
 /// </summary>
 public class UpdateChecker : IUpdateChecker
 {
@@ -72,7 +71,6 @@ public class UpdateChecker : IUpdateChecker
                 LatestStableVersion = latestStable?.ToString() ?? latestVersion.ToString(),
                 LatestPrereleaseVersion = latestPrerelease?.ToString(),
                 VersionChangeType = versionChangeType,
-                ReleaseDate = null, // Would require additional API calls to determine
                 IsCompatible = await CheckFrameworkCompatibilityAsync(
                     package.Id,
                     latestVersion.ToString(),
@@ -102,7 +100,7 @@ public class UpdateChecker : IUpdateChecker
         return VersionChangeType.None;
     }
 
-    private async Task<bool> CheckFrameworkCompatibilityAsync(
+    private Task<bool> CheckFrameworkCompatibilityAsync(
         string packageId,
         string version,
         string? targetFramework,
@@ -110,7 +108,7 @@ public class UpdateChecker : IUpdateChecker
     {
         // TODO: Implement a real TFM compatibility check by reading the package's supported target frameworks
         // from NuGet metadata (e.g., package registration/flat container nuspec) and comparing with targetFramework.
-        return true;
+        return Task.FromResult(true);
     }
 
     private string? BuildReleaseNotesUrl(string? projectUrl, string version)

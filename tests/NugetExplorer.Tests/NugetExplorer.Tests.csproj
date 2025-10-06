@@ -16,4 +16,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NugetExplorer.Domain\NugetExplorer.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

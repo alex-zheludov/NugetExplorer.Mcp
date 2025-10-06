@@ -1,0 +1,133 @@
+name: Build and Package
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  SOLUTION_FILE: 'NuGetExplorerMcp.sln'
+
+jobs:
+  build-and-package:
+    name: Build, Test and Package
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v1
+      with:
+        versionSpec: '6.x'
+
+    - name: Determine Version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v1
+      with:
+        useConfigFile: true
+
+    - name: Display GitVersion outputs
+      run: |
+        echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
+        echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
+        echo "InformationalVersion: ${{ steps.gitversion.outputs.informationalVersion }}"
+
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_FILE }}
+
+    - name: Build solution
+      run: dotnet build ${{ env.SOLUTION_FILE }} --configuration Release --no-restore /p:Version=${{ steps.gitversion.outputs.semVer }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }} /p:InformationalVersion=${{ steps.gitversion.outputs.informationalVersion }}
+
+    - name: Run tests
+      run: dotnet test ${{ env.SOLUTION_FILE }} --configuration Release --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage"
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: '**/TestResults/**/*.trx'
+
+    - name: Upload coverage reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports
+        path: '**/TestResults/**/coverage.cobertura.xml'
+
+    - name: Publish for Linux x64
+      if: github.event_name == 'push' || github.event_name == 'release'
+      run: dotnet publish src/NugetExplorer.Mcp/NugetExplorer.Mcp.csproj -c Release -r linux-x64 --self-contained -o ./publish/linux-x64 /p:Version=${{ steps.gitversion.outputs.semVer }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }}
+
+    - name: Publish for Windows x64
+      if: github.event_name == 'push' || github.event_name == 'release'
+      run: dotnet publish src/NugetExplorer.Mcp/NugetExplorer.Mcp.csproj -c Release -r win-x64 --self-contained -o ./publish/win-x64 /p:Version=${{ steps.gitversion.outputs.semVer }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }}
+
+    - name: Publish for macOS x64
+      if: github.event_name == 'push' || github.event_name == 'release'
+      run: dotnet publish src/NugetExplorer.Mcp/NugetExplorer.Mcp.csproj -c Release -r osx-x64 --self-contained -o ./publish/osx-x64 /p:Version=${{ steps.gitversion.outputs.semVer }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }}
+
+    - name: Publish for macOS ARM64
+      if: github.event_name == 'push' || github.event_name == 'release'
+      run: dotnet publish src/NugetExplorer.Mcp/NugetExplorer.Mcp.csproj -c Release -r osx-arm64 --self-contained -o ./publish/osx-arm64 /p:Version=${{ steps.gitversion.outputs.semVer }} /p:AssemblyVersion=${{ steps.gitversion.outputs.assemblySemVer }}
+
+    - name: Create archives
+      if: github.event_name == 'push' || github.event_name == 'release'
+      run: |
+        VERSION=${{ steps.gitversion.outputs.semVer }}
+        cd publish
+        tar -czf nuget-explorer-mcp-${VERSION}-linux-x64.tar.gz -C linux-x64 .
+        tar -czf nuget-explorer-mcp-${VERSION}-win-x64.tar.gz -C win-x64 .
+        tar -czf nuget-explorer-mcp-${VERSION}-osx-x64.tar.gz -C osx-x64 .
+        tar -czf nuget-explorer-mcp-${VERSION}-osx-arm64.tar.gz -C osx-arm64 .
+
+    - name: Upload build artifacts
+      if: github.event_name == 'push' || github.event_name == 'release'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-explorer-mcp-packages
+        path: publish/*.tar.gz
+
+    - name: Upload release assets
+      if: github.event_name == 'release'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release upload ${{ github.event.release.tag_name }} publish/*.tar.gz
+
+  code-quality:
+    name: Code Quality Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_FILE }}
+
+    - name: Build solution
+      run: dotnet build ${{ env.SOLUTION_FILE }} --configuration Release --no-restore
+
+    - name: Run dotnet format check
+      run: dotnet format ${{ env.SOLUTION_FILE }} --verify-no-changes --verbosity diagnostic
+      continue-on-error: true

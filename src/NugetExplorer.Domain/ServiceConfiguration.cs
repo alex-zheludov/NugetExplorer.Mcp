@@ -4,10 +4,10 @@ using NuGetExplorerMcp.Application.Interfaces;
 using NuGetExplorerMcp.Application.Services;
 using NuGetExplorerMcp.Infrastructure.Services;
 
-namespace NuGetExplorerMcp.Server;
+namespace NuGetExplorerMcp.Domain;
 
 /// <summary>
-/// Configures dependency injection for the NuGet Explorer MCP Server.
+/// Configures dependency injection for NuGet Explorer services.
 /// </summary>
 public static class ServiceConfiguration
 {

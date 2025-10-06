@@ -8,12 +8,19 @@
     <PackageReference Include="coverlet.collector" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="ModelContextProtocol" />
+    <PackageReference Include="Shouldly" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="Shouldly" />
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NugetExplorer.Domain\NugetExplorer.Domain.csproj" />
+    <ProjectReference Include="..\..\src\NugetExplorer.Mcp\NugetExplorer.Mcp.csproj" />
   </ItemGroup>
 
 </Project>

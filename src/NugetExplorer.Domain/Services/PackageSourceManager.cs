@@ -14,7 +14,6 @@ namespace NuGetExplorerMcp.Infrastructure.Services;
 
 /// <summary>
 /// Manages NuGet package sources and retrieves package metadata from configured feeds.
-/// Implements Single Responsibility Principle (SRP) by focusing only on package source management.
 /// </summary>
 public class PackageSourceManager : IPackageSourceManager
 {
